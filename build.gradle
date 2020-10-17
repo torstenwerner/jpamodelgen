@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final"
+
+//    def modelgenVersion = "5.2.18.Final" // works
+//    def modelgenVersion = "5.3.18.Final" // fails
+    def modelgenVersion = "5.4.22.Final" // fails
+    annotationProcessor "org.hibernate:hibernate-jpamodelgen:${modelgenVersion}"
+}
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file("build/generated/java")
+}
+
+sourceSets {
+    generated {
+        java { srcDirs = ['build/generated/java'] }
+        compileClasspath += sourceSets.main.runtimeClasspath
+    }
+}
